@@ -1,0 +1,58 @@
+<h2>Question {{ currentQuestionIndex }} for {{ selectedCategory }}</h2>
+<h3>{{ questions[currentQuestionIndex]?.question }}</h3>
+
+<div *ngIf="questions[currentQuestionIndex]?.type === 'multiple'">
+  <select
+    (change)="onAnswerSelect($event)"
+    [ngModel]="userAnswers[currentQuestionIndex]"
+  >
+    <option
+      *ngFor="let answer of questions[currentQuestionIndex]?.answersList"
+      [value]="answer.value"
+    >
+      {{ answer.viewValue }}
+    </option>
+  </select>
+</div>
+
+<div *ngIf="questions[currentQuestionIndex]?.type === 'boolean'">
+  <input
+    type="checkbox"
+    id="true"
+    name="true"
+    value="true"
+    (change)="onAnswerSelect($event)"
+    [ngModel]="userAnswers[currentQuestionIndex]"
+  />
+  <label for="true"> true</label><br />
+  <input type="checkbox" id="false" name="false" value="false" />
+  <label for="false"> false</label><br />
+</div>
+
+<div *ngIf="questions[currentQuestionIndex]?.type === 'freetext'">
+  <textarea
+    (input)="onAnswerSelect($event)"
+    [ngModel]="userAnswers[currentQuestionIndex]"
+    rows="4"
+    cols="50"
+  >
+  </textarea>
+</div>
+<br /><br />
+<div>
+  <button (click)="previousQuestion()" [disabled]="currentQuestionIndex === 0">
+    Previous
+  </button>
+  <button
+    (click)="nextQuestion()"
+    [disabled]="!userAnswers[currentQuestionIndex]"
+  >
+    Next
+  </button>
+  <br /><br /><br />
+  <span>Answers progress: </span>
+  <progress
+    value="{{ currentQuestionIndex }}"
+    max="{{ questions.length }}"
+  ></progress>
+</div>
